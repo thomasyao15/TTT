@@ -1,0 +1,35 @@
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 50px;
+}
+
+#reset {
+    padding: 10px 30px;
+    font-size: 18px;
+    margin-bottom: 40px;
+}
+
+.game-board {
+    display: grid;
+    width: 70vmin;
+    height: 70vmin;
+    grid-template-columns: repeat(3, 1fr);
+    background-color: aliceblue;
+}
+
+.cell {
+    border: 2px solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15vmin;
+    line-height: 0;
+}
+
+.cell:hover {
+    cursor: pointer;
+}
