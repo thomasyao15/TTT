@@ -21,10 +21,19 @@ const gameBoard = (function () {
         return playerWon;
     }
 
+    function _isDraw() {
+        const boardIsFull = _gameBoardArray.every(cell => cell != "");
+        const xDidNotWin = !_isWinningCombination("X");
+        const oDidNotWin = !_isWinningCombination("O");
+        return (boardIsFull && xDidNotWin && oDidNotWin);
+    }
+
     function fillCell(playerSign, cellIndex) {
         _gameBoardArray[cellIndex] = playerSign;
         if (_isWinningCombination(playerSign)) {
             console.log("Player " + playerSign + " won!");
+        } else if (_isDraw()) {
+            console.log("It's a draw!");
         }
     }
 
