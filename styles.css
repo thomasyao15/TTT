@@ -7,13 +7,13 @@
     padding-top: 50px;
 }
 
-#reset {
+#reset, #replay {
     padding: 10px 30px;
     font-size: 18px;
-    margin-bottom: 40px;
 }
 
 .game-board {
+    margin-top: 40px;
     display: grid;
     width: 70vmin;
     height: 70vmin;
@@ -33,3 +33,25 @@
 .cell:hover {
     cursor: pointer;
 }
+
+.modal-container {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(46, 46, 46, 0.377);
+}
+
+.finish-modal {
+    background-color: aliceblue;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+}
+
