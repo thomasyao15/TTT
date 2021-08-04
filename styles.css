@@ -1,4 +1,8 @@
 
+html, button {
+    font-family: 'Courier New', Courier, monospace;
+}
+
 .main-container {
     display: flex;
     flex-direction: column;

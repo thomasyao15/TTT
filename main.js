@@ -1,6 +1,7 @@
 
 const gameBoard = (function () {
     let _gameBoardArray = ["", "", "", "", "", "", "", "", ""];
+
     const _winningCombinations = [
         [0, 1, 2],
         [0, 3, 6],
@@ -14,13 +15,13 @@ const gameBoard = (function () {
 
     function _isWinningCombination(playerSign) {
         // Grab all cells currently filled by the player to check if board contains winning combo
-        let playerFilledCells = Array.from(document.querySelectorAll(".cell"));
-        playerFilledCells = playerFilledCells.filter(cell => cell.textContent == playerSign);
-        playerFilledCells = playerFilledCells.map(cell => parseInt(cell.id));
+        let playerCurrentlyFilledCells = Array.from(document.querySelectorAll(".cell"));
+        playerCurrentlyFilledCells = playerCurrentlyFilledCells.filter(cell => cell.textContent == playerSign);
+        playerCurrentlyFilledCells = playerCurrentlyFilledCells.map(cell => parseInt(cell.id));
 
         const playerWon = _winningCombinations.some(combination => {
             return combination.every(winningCell => {
-                return playerFilledCells.includes(winningCell);
+                return playerCurrentlyFilledCells.includes(winningCell);
             })
         })
 
@@ -47,13 +48,13 @@ const gameBoard = (function () {
         _gameBoardArray = ["", "", "", "", "", "", "", "", ""];
     }
 
-    function cellIsAvailable(cellIndex) {
+    function cellIsEmpty(cellIndex) {
         return _gameBoardArray[cellIndex] == "";
     }
 
     return {
         fillCell,
-        cellIsAvailable,
+        cellIsEmpty,
         resetBoard,
     };
 })();
@@ -90,17 +91,17 @@ const displayController = (function () {
 
 
 const gameController = (function () {
-    let _playerTurn = "X";
+    let _playerTurn = "X";  // X starts first by default
 
-    function resetGame() {
+    function handleResetButtonClick() {
         displayController.resetBoard();
         gameBoard.resetBoard();
     }
 
-    function fillCell(e) {
+    function handleCellClick(e) {
         const cellIndex = parseInt(e.target.id);
 
-        if (gameBoard.cellIsAvailable(cellIndex)) {
+        if (gameBoard.cellIsEmpty(cellIndex)) {
             displayController.fillCell(_playerTurn, cellIndex);
             gameBoard.fillCell(_playerTurn, cellIndex);
             _playerTurn = (_playerTurn == "X") ? "O" : "X";
@@ -110,8 +111,8 @@ const gameController = (function () {
     }
 
     return {
-        resetGame,
-        fillCell,
+        handleResetButtonClick,
+        handleCellClick,
     };
 })();
 
@@ -121,10 +122,10 @@ function init() {
     const replayButton = document.getElementById("replay");
     const gameCells = document.querySelectorAll(".cell");
 
-    resetButton.addEventListener("click", gameController.resetGame);
-    replayButton.addEventListener("click", gameController.resetGame);
+    resetButton.addEventListener("click", gameController.handleResetButtonClick);
+    replayButton.addEventListener("click", gameController.handleResetButtonClick);
     gameCells.forEach(cell => {
-        cell.addEventListener("click", gameController.fillCell);
+        cell.addEventListener("click", gameController.handleCellClick);
     });
 }
 
