@@ -1,27 +1,26 @@
 
-const gameBoard = (function() {
+const gameBoard = (function () {
     const _gameBoardArray = ["", "", "", "", "", "", "", "", ""];
     const _winningCombinations = "";
 
     function fillCell(playerSign, cellIndex) {
-        const cellIsAvailable = _gameBoardArray[cellIndex] == "";
+        _gameBoardArray[cellIndex] = playerSign;
+        displayController.fillCell(playerSign, cellIndex);
+        console.log(_gameBoardArray);
+    }
 
-        if (cellIsAvailable) {
-            _gameBoardArray[cellIndex] = playerSign;
-            displayController.fillCell(playerSign, cellIndex);
-            console.log(_gameBoardArray);
-        } else {
-            console.log("Cell is already filled");
-        }
-
+    function cellIsAvailable(cellIndex) {
+        return _gameBoardArray[cellIndex] == "";
     }
 
     return {
         fillCell,
+        cellIsAvailable
     };
 })();
 
-const displayController = (function() {
+
+const displayController = (function () {
     function fillCell(playerSign, cellIndex) {
         targetCell = document.getElementById(`${cellIndex}`);
         targetCell.textContent = playerSign;
@@ -32,7 +31,8 @@ const displayController = (function() {
     };
 })();
 
-const gameController = (function() {
+
+const gameController = (function () {
     let _playerTurn = "X";
 
     function resetGame() {
@@ -41,9 +41,13 @@ const gameController = (function() {
 
     function fillCell(e) {
         const cellIndex = parseInt(e.target.id);
-        gameBoard.fillCell(_playerTurn, cellIndex);
 
-        _playerTurn = (_playerTurn == "X") ? "O" : "X";
+        if (gameBoard.cellIsAvailable(cellIndex)) {
+            gameBoard.fillCell(_playerTurn, cellIndex);
+            _playerTurn = (_playerTurn == "X") ? "O" : "X";
+        } else {
+            console.log("Cell is already filled");
+        }
     }
 
     return {
@@ -59,7 +63,7 @@ function init() {
 
     resetButton.addEventListener("click", gameController.resetGame);
     gameCells.forEach(cell => {
-        cell.addEventListener("click", gameController.fillCell, {once: true});
+        cell.addEventListener("click", gameController.fillCell);
     });
 }
 
