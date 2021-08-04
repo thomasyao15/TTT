@@ -31,9 +31,9 @@ const gameBoard = (function () {
     function fillCell(playerSign, cellIndex) {
         _gameBoardArray[cellIndex] = playerSign;
         if (_isWinningCombination(playerSign)) {
-            console.log("Player " + playerSign + " won!");
+            displayController.showFinishPage(`${playerSign} won!`);
         } else if (_isDraw()) {
-            console.log("It's a draw!");
+            displayController.showFinishPage("It's a draw!");
         }
     }
 
@@ -54,8 +54,17 @@ const displayController = (function () {
         targetCell.textContent = playerSign;
     }
 
+    function showFinishPage(finishMessage) {
+        const finishMessageHeader = document.getElementById("finish-message");
+        finishMessageHeader.textContent = finishMessage;
+
+        const finishModal = document.getElementById("finish-page");
+        finishModal.style.display = "flex";
+    }
+
     return {
         fillCell,
+        showFinishPage,
     };
 })();
 
@@ -88,9 +97,11 @@ const gameController = (function () {
 
 function init() {
     const resetButton = document.getElementById("reset");
+    const replayButton = document.getElementById("replay");
     const gameCells = document.querySelectorAll(".cell");
 
     resetButton.addEventListener("click", gameController.resetGame);
+    replayButton.addEventListener("click", gameController.resetGame);
     gameCells.forEach(cell => {
         cell.addEventListener("click", gameController.fillCell);
     });
