@@ -1,12 +1,31 @@
 
 const gameBoard = (function () {
     const _gameBoardArray = ["", "", "", "", "", "", "", "", ""];
-    const _winningCombinations = "";
+    const _winningCombinations = [
+        [0, 1, 2],
+        [0, 3, 6]
+    ];
+
+    function _isWinningCombination(playerSign) {
+        // Grab all cells currently filled by the player to check if board contains winning combo
+        let playerFilledCells = Array.from(document.querySelectorAll(".cell"));
+        playerFilledCells = playerFilledCells.filter(cell => cell.textContent == playerSign);
+        playerFilledCells = playerFilledCells.map(cell => parseInt(cell.id));
+
+        const playerWon = _winningCombinations.some(combination => {
+            return combination.every(winningCell => {
+                return playerFilledCells.includes(winningCell);
+            })
+        })
+
+        return playerWon;
+    }
 
     function fillCell(playerSign, cellIndex) {
         _gameBoardArray[cellIndex] = playerSign;
-        displayController.fillCell(playerSign, cellIndex);
-        console.log(_gameBoardArray);
+        if (_isWinningCombination(playerSign)) {
+            console.log("Player " + playerSign + " won!");
+        }
     }
 
     function cellIsAvailable(cellIndex) {
@@ -43,6 +62,7 @@ const gameController = (function () {
         const cellIndex = parseInt(e.target.id);
 
         if (gameBoard.cellIsAvailable(cellIndex)) {
+            displayController.fillCell(_playerTurn, cellIndex);
             gameBoard.fillCell(_playerTurn, cellIndex);
             _playerTurn = (_playerTurn == "X") ? "O" : "X";
         } else {
