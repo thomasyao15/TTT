@@ -1,6 +1,6 @@
 
 const gameBoard = (function () {
-    const _gameBoardArray = ["", "", "", "", "", "", "", "", ""];
+    let _gameBoardArray = ["", "", "", "", "", "", "", "", ""];
     const _winningCombinations = [
         [0, 1, 2],
         [0, 3, 6]
@@ -37,13 +37,18 @@ const gameBoard = (function () {
         }
     }
 
+    function resetBoard() {
+        _gameBoardArray = ["", "", "", "", "", "", "", "", ""];
+    }
+
     function cellIsAvailable(cellIndex) {
         return _gameBoardArray[cellIndex] == "";
     }
 
     return {
         fillCell,
-        cellIsAvailable
+        cellIsAvailable,
+        resetBoard,
     };
 })();
 
@@ -62,9 +67,18 @@ const displayController = (function () {
         finishModal.style.display = "flex";
     }
 
+    function resetBoard() {
+        const gameCells = document.querySelectorAll(".cell");
+        gameCells.forEach(cell => cell.textContent = "");
+
+        const finishModal = document.getElementById("finish-page");
+        finishModal.style.display = "none";
+    }
+
     return {
         fillCell,
         showFinishPage,
+        resetBoard,
     };
 })();
 
@@ -73,7 +87,8 @@ const gameController = (function () {
     let _playerTurn = "X";
 
     function resetGame() {
-        console.log("Resetting game");
+        displayController.resetBoard();
+        gameBoard.resetBoard();
     }
 
     function fillCell(e) {
